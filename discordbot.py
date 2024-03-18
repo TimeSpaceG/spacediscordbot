@@ -7,7 +7,9 @@ import os
 TOKEN = os.environ.get('QAIUu22utYQZv82IEGId7QWtoBUEiou3')
 PREFIX = os.environ.get('PREFIX', '!')  # PREFIX 환경 변수를 가져오고, 없으면 기본값 '!'을 사용합니다.
 
-bot = commands.Bot(command_prefix=PREFIX)
+intents = discord.Intents.default()
+intents.voice_states = True
+bot = commands.Bot(command_prefix=PREFIX, intents=intents)
 
 # 봇이 준비되었을 때 실행할 코드
 @bot.event
@@ -34,11 +36,11 @@ async def play(ctx, url):
     # YouTube 영상 다운로드 및 재생
     voice_client = ctx.voice_client
     ydl_opts = {
-        'format': 'bestaudio/best',
+        'format': 'best audio/best',
         'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
+            'key': 'FFFFFmpegExtractAudio',
+            'preferred codec': 'mp3',
+            'preferred quality': '192',
         }],
     }
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
