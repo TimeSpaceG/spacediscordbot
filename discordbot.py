@@ -4,14 +4,10 @@ import youtube_dl
 import os
 
 # 봇 설정
-TOKEN = 'QAIUu22utYQZv82IEGId7QWtoBUEiou3'
-bot = commands.Bot(command_prefix='!')
+TOKEN = os.environ.get('QAIUu22utYQZv82IEGId7QWtoBUEiou3')
 PREFIX = os.environ.get('PREFIX', '!')  # PREFIX 환경 변수를 가져오고, 없으면 기본값 '!'을 사용합니다.
 
-# 메시지 처리: "안녕" 명령어에 대한 응답
-@bot.command(name='정애니맨')
-async def say_hello(ctx):
-    await ctx.send('안녕하세요! 정애니맨 봇입니다. ')
+bot = commands.Bot(command_prefix=PREFIX)
 
 # 봇이 준비되었을 때 실행할 코드
 @bot.event
