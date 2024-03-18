@@ -1,11 +1,12 @@
 import discord
 from discord.ext import commands
 import youtube_dl
+import os
 
 # 봇 설정
 TOKEN = 'QAIUu22utYQZv82IEGId7QWtoBUEiou3'
 bot = commands.Bot(command_prefix='!')
-
+PREFIX = os.environ.get('PREFIX', '!')  # PREFIX 환경 변수를 가져오고, 없으면 기본값 '!'을 사용합니다.
 
 # 메시지 처리: "안녕" 명령어에 대한 응답
 @bot.command(name='정애니맨')
