@@ -1,19 +1,21 @@
 import discord
 from discord.ext import commands
+import youtube_dl
 
 # 봇 설정
 TOKEN = 'QAIUu22utYQZv82IEGId7QWtoBUEiou3'
 bot = commands.Bot(command_prefix='!')
 
-# 봇이 준비되었을 때 실행할 코드
-@bot.event
-async def on_ready():
-    print(f'{bot.user}이(가) 성공적으로 로그인했습니다.')
 
 # 메시지 처리: "안녕" 명령어에 대한 응답
 @bot.command(name='정애니맨')
 async def say_hello(ctx):
-    await ctx.send('네 안녕하세요 정애니맨 봇입니다.')
+    await ctx.send('안녕하세요! 정애니맨 봇입니다. ')
+
+# 봇이 준비되었을 때 실행할 코드
+@bot.event
+async def on_ready():
+    print(f'{bot.user}이(가) 성공적으로 로그인했습니다.')
 
 # 음성 채널 지원: 음성 채널 입장
 @bot.command(name='들어와')
@@ -24,19 +26,28 @@ async def join_voice(ctx):
     else:
         await ctx.send("음성 채널에 먼저 들어가주세요.")
 
-# 이벤트 처리: 사용자 조인 시 환영 메시지 전송
-@bot.event
-async def on_member_join(member):
-    channel = member.guild.system_channel
-    if channel:
-        await channel.send(f'{member.mention}님, 환영합니다!')
+# 음악 재생
+@bot.command(name='재생')
+async def play(ctx, url):
+    # 봇이 음성 채널에 없으면 입장
+    if not ctx.voice_client:
+        channel = ctx.author.voice.channel
+        await channel.connect()
 
-# 멀티 서버 지원: 현재 서버 목록 출력
-@bot.command(name='서버목록')
-async def list_servers(ctx):
-    servers = list(bot.guilds)
-    server_list = "\n".join([f"{server.name} (ID: {server.id})" for server in servers])
-    await ctx.send(f"현재 봇이 참여한 서버 목록:\n{server_list}")
+    # YouTube 영상 다운로드 및 재생
+    voice_client = ctx.voice_client
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+    }
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(url, download=False)
+        url2 = info['formats'][0]['url']
+        voice_client.play(discord.FFmpegPCMAudio(url2), after=lambda e: print('재생 완료', e))
 
 # 봇 실행
 bot.run(TOKEN)
