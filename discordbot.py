@@ -4,7 +4,7 @@ import youtube_dl
 import os
 
 # 봇 설정
-TOKEN = os.environ.get('TOKEN')
+TOKEN = os.environ.get('DISCORD_BOT_TOKEN')
 PREFIX = os.environ.get('PREFIX', '!')  # PREFIX 환경 변수를 가져오고, 없으면 기본값 '!'을 사용합니다.
 
 intents = discord.Intents.default()
